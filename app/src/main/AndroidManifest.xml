@@ -15,7 +15,7 @@
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".WorkoutActivity"
+            android:name=".workout.WorkoutActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
