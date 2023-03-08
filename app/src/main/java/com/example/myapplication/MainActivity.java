@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.myapplication.fragment.HomeFragment;
+import com.example.myapplication.fragment.WorkoutFragment;
 import com.example.myapplication.fragment.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 fragment = new SettingsFragment();
                 break;
 
+            case R.id.workout :
+                fragment = new WorkoutFragment();
+                break;
         }
 
         if(fragment != null) {

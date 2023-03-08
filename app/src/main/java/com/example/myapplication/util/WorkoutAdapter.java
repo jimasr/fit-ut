@@ -1,4 +1,4 @@
-package com.example.myapplication.workout;
+package com.example.myapplication.util;
 
 import android.content.Context;
 import android.view.LayoutInflater;
