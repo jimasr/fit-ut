@@ -1,4 +1,4 @@
-package com.example.myapplication.workout;
+package com.example.myapplication.util;
 
 public class WorkoutItem {
     String type_name;
