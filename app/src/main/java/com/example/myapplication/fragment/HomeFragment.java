@@ -7,19 +7,21 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.example.myapplication.BuildConfig;
 import com.example.myapplication.R;
+import com.example.myapplication.entity.Place;
+import com.example.myapplication.util.FetchData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -29,17 +31,23 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.libraries.places.api.Places;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
-
+    private static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/";
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private MapView mapView;
@@ -48,6 +56,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private Marker currentLocation;
     private GoogleMap googleMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
+    private List<Place> placeList;
 
 
     public HomeFragment() {
@@ -66,8 +75,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
-
-
     }
 
     @Override
@@ -126,6 +133,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
             this.googleMap.setMyLocationEnabled(true);
         }
+        this.googleMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
     LocationCallback locationCallback = new LocationCallback() {
@@ -135,7 +143,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             if (locationList.size() > 0) {
                 //The last location in the list is the newest
                 Location location = locationList.get(locationList.size() - 1);
-                Log.i("MapsActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
+                Log.i("HomeFragment", "Location: " + location.getLatitude() + " " + location.getLongitude());
                 lastLocation = location;
                 if (currentLocation != null) {
                     currentLocation.remove();
@@ -143,11 +151,23 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                 //Place current location marker
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                //Location marker
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
                 markerOptions.title("Current Position");
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                 currentLocation = googleMap.addMarker(markerOptions);
+
+                //Gym marker
+                fetchPlaces(latLng);
+                for(Place place : placeList) {
+                    MarkerOptions marker = new MarkerOptions();
+                    marker.position(place.getLatLng());
+                    marker.title(place.getName());
+                    marker.icon(BitmapDescriptorFactory.defaultMarker());
+                    googleMap.addMarker(marker);
+                }
 
                 //move map camera
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
@@ -199,13 +219,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
                 new AlertDialog.Builder(getContext())
                         .setTitle("Location Permission Needed")
                         .setMessage("This app needs the Location permission, please accept to use location functionality")
@@ -223,11 +239,38 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
 
             } else {
-                // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION );
             }
+        }
+    }
+
+    private void fetchPlaces(LatLng latLng) {
+        String latitude = String.valueOf(latLng.latitude);
+        String longitude = String.valueOf(latLng.longitude);
+        String url = BASE_URL + "json?location=" + latitude + "%2C" + longitude + "&radius=1000&type=gym&keyword=gym&key=" + BuildConfig.MAPS_API_KEY;
+        placeList = new ArrayList<>();
+
+        FetchData fetchData = new FetchData(url);
+        JSONObject jsonObject = fetchData.getJsonObject();
+
+        try {
+            JSONArray jsonArray = jsonObject.getJSONArray("results");
+
+            for(int i=0; i<jsonArray.length(); i++) {
+                JSONObject data = jsonArray.getJSONObject(i);
+                String name = data.getString("name");
+                String vicinity = data.getString("vicinity");
+                String lat = data.getJSONObject("geometry").getJSONObject("location").getString("lat");
+                String lng = data.getJSONObject("geometry").getJSONObject("location").getString("lng");
+
+                Place place = new Place(name, vicinity, new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
+                placeList.add(place);
+            }
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
     }
 
