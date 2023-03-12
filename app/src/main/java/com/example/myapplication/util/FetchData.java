@@ -31,8 +31,6 @@ public class FetchData extends Thread {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     @Override
@@ -47,8 +45,6 @@ public class FetchData extends Thread {
             while ((line = bufferedReader.readLine()) != null) {
                 data = data + line;
             }
-
-            Log.i("Info", data);
 
             if(!data.isEmpty()) {
                 jsonObject = new JSONObject(data);
