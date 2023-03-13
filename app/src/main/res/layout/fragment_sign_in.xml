@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.SignInFragment"
+    android:padding="40dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/loginImage"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:background="@drawable/login"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/loginTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textSize="24dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:layout_below="@+id/loginImage"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLogin"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/loginTitle"
+            android:layout_centerHorizontal="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailLoginInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:textSize="14dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordSignUp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/emailLogin"
+            android:layout_centerHorizontal="true"
+            app:passwordToggleEnabled="true" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordLSignUpInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:textSize="14dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/signUpButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="90dp"
+            android:padding="5dp"
+            android:text="Login"
+            android:layout_below="@+id/passwordSignUp"
+            android:background="@drawable/rounded_corner"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/signUpButton"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Don't have an account?"
+                android:layout_marginVertical="5dp"/>
+
+            <TextView
+                android:id="@+id/signUpLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign up"
+                android:textColor="@color/purple_500"
+                android:layout_marginVertical="5dp"
+                android:layout_marginHorizontal="2dp"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</FrameLayout>

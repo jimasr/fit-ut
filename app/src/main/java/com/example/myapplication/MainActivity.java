@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         return true;
     }
 
-    public void loadFragment(Fragment fragment) {
+    private void loadFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.relativelayout, fragment).commit();
     }
 
