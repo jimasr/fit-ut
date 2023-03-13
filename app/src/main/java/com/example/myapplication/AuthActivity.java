@@ -28,7 +28,6 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         FirebaseUser currentUser = auth.getCurrentUser();
 
     }
