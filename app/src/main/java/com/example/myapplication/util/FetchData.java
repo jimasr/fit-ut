@@ -25,10 +25,7 @@ public class FetchData extends Thread {
         try {
             this.url = new URL(url);
             this.start();
-            this.join();
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -49,12 +46,9 @@ public class FetchData extends Thread {
             if(!data.isEmpty()) {
                 jsonObject = new JSONObject(data);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | JSONException e) {
+            Log.e("FetchData", "Error in fetching data");
         }
-
     }
 
     public JSONObject getJsonObject() {

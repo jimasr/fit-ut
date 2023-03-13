@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -138,6 +139,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         locationRequest.setInterval(120000);
         locationRequest.setFastestInterval(120000);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        Places.initialize(getContext(), BuildConfig.MAPS_API_KEY);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getContext(),
@@ -277,8 +279,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         FetchData fetchData = new FetchData(url);
         JSONObject jsonObject = fetchData.getJsonObject();
 
-        if(jsonObject != null) {
-            try {
+        try {
+
+            if(jsonObject != null) {
+
                 JSONArray jsonArray = jsonObject.getJSONArray("results");
 
                 for(int i=0; i<jsonArray.length(); i++) {
@@ -291,11 +295,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     Place place = new Place(name, vicinity, new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
                     placeList.add(place);
                 }
-
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
             }
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
+
 
     }
 
