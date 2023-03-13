@@ -30,12 +30,30 @@
             android:layout_below="@+id/signUpImage"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailLogin"
+            android:id="@+id/nameLogin"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_below="@+id/signUpTitle"
+            android:layout_centerHorizontal="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameLoginInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:textSize="14dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLogin"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/nameLogin"
             android:layout_centerHorizontal="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -71,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="90dp"
+            android:layout_marginTop="70dp"
             android:padding="5dp"
             android:text="Sign Up"
             android:layout_below="@+id/passwordSignUp"
