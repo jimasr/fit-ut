@@ -43,45 +43,45 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
-                android:textSize="14dp" />
+                android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordSignUp"
+            android:id="@+id/passwordLoginText"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_below="@+id/emailLogin"
             android:layout_centerHorizontal="true"
-            app:passwordToggleEnabled="true" >
+            app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordLSignUpInput"
+                android:id="@+id/passwordLoginInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
-                android:textSize="14dp" />
+                android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/signUpButton"
+            android:id="@+id/signInButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="90dp"
             android:padding="5dp"
             android:text="Login"
-            android:layout_below="@+id/passwordSignUp"
+            android:layout_below="@+id/passwordLoginText"
             android:background="@drawable/rounded_corner"/>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/signUpButton"
+            android:layout_below="@+id/signInButton"
             android:orientation="horizontal"
             android:gravity="center">
 
