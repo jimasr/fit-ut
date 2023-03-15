@@ -2,16 +2,16 @@ package com.example.myapplication.util;
 
 public class WorkoutItem {
     String type_name;
-    String number_of_exercise;
+    int number_of_exercise;
     int image;
 
-    public WorkoutItem(String type_name, String number_of_exercise, int image) {
+    public WorkoutItem(String type_name, int number_of_exercise, int image) {
         this.type_name = type_name;
         this.number_of_exercise = number_of_exercise;
         this.image = image;
     }
 
-    public WorkoutItem(String type_name, String number_of_exercise) {
+    public WorkoutItem(String type_name, int number_of_exercise) {
         this.type_name = type_name;
         this.number_of_exercise = number_of_exercise;
         this.image = 0;
@@ -25,11 +25,11 @@ public class WorkoutItem {
         this.type_name = type_name;
     }
 
-    public String getNumber_of_exercise() {
+    public int getNumber_of_exercise() {
         return number_of_exercise;
     }
 
-    public void setNumber_of_exercise(String number_of_exercise) {
+    public void setNumber_of_exercise(int number_of_exercise) {
         this.number_of_exercise = number_of_exercise;
     }
 

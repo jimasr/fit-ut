@@ -1,10 +1,10 @@
 package com.example.myapplication.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -15,11 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.api.APIClient;
 import com.example.myapplication.api.APIInterface;
-import com.example.myapplication.pojo.MultipleResource;
+import com.example.myapplication.entity.Exercise;
 import com.example.myapplication.util.WorkoutAdapter;
 import com.example.myapplication.util.WorkoutItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -29,89 +30,64 @@ import retrofit2.Response;
 public class WorkoutFragment extends Fragment {
 
     private static final String TAG = "WorkoutActivity";
-    APIInterface apiInterface;
+
+    private static final String BASE_URL = "https://api.api-ninjas.com/";
+    private static APIInterface apiInterface;
+    private Call<List<Exercise>> listWorkoutCall;
+    private HashMap<String, String> LIST_OF_TYPE;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View result = inflater.inflate(R.layout.fragment_workout, container, false);
 
-        RecyclerView recyclerView = result.findViewById(R.id.workout_recyclerview);
-
-        // TEST DATA
-
         List<WorkoutItem> items = new ArrayList<WorkoutItem>();
-
-        items.add(new WorkoutItem("Cardio", "10", R.drawable.cardio));
-        items.add(new WorkoutItem("Strength", "15", R.drawable.strength));
-        items.add(new WorkoutItem("Stretching", "2", R.drawable.stretching));
-
-        /////////////////////////////////////
-
-        apiInterface = APIClient.getClient().create(APIInterface.class);
-
-        // TEST RETROFIT
-        /**
-         GET List Resources
-         **/
-        /*
-        Call<MultipleResource> call = apiInterface.doGetListResources();
-        call.enqueue(new Callback<MultipleResource>() {
-            @Override
-            public void onResponse(Call<MultipleResource> call, Response<MultipleResource> response) {
-
-                Log.d("TAG",response.code()+"");
-
-                String displayResponse = "";
-
-                MultipleResource resource = response.body();
-                Integer text = resource.page;
-                Integer total = resource.total;
-                Integer totalPages = resource.totalPages;
-                List<MultipleResource.Datum> datumList = resource.data;
-
-                displayResponse += text + " Page\n" + total + " Total\n" + totalPages + " Total Pages\n";
-
-                for (MultipleResource.Datum datum : datumList) {
-                    displayResponse += datum.id + " " + datum.name + " " + datum.pantoneValue + " " + datum.year + "\n";
-                }
-
-                //responseText.setText(displayResponse);
-
-            }
-
-            @Override
-            public void onFailure(Call<MultipleResource> call, Throwable t) {
-                call.cancel();
-            }
-        });
-
-        /**
-         Create new workout
-         **/
-        WorkoutItem workout = new WorkoutItem("Dexterity", "10", R.drawable.strength);
-        Call<WorkoutItem> call1 = apiInterface.createWorkout(workout);
-        call1.enqueue(new Callback<WorkoutItem>() {
-            @Override
-            public void onResponse(Call<WorkoutItem> call, Response<WorkoutItem> response) {
-                WorkoutItem workout1 = response.body();
-
-                Toast.makeText(result.getContext(), workout1.getType_name(), Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onFailure(Call<WorkoutItem> call, Throwable t) {
-                call.cancel();
-            }
-        });
-
-
-        /////////////////////////////////////
+        LIST_OF_TYPE = initWorkoutList();
+        RecyclerView recyclerView = result.findViewById(R.id.workout_recyclerview);
+        WorkoutAdapter workoutAdapter = new WorkoutAdapter(result.getContext(), items);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(result.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new WorkoutAdapter(result.getContext(), items));
+        recyclerView.setAdapter(workoutAdapter);
+
+        // Retrofit for fetching the data from the API Ninja
+        apiInterface = APIClient.getClient(BASE_URL).create(APIInterface.class);
+
+        for (String type: LIST_OF_TYPE.keySet()) {
+            WorkoutItem item = new WorkoutItem(type, 0, R.drawable.default_illustration);
+            items.add(item);
+
+            listWorkoutCall = apiInterface.getDataByType(LIST_OF_TYPE.get(type));
+            listWorkoutCall.enqueue(new Callback<List<Exercise>>() {
+                @Override
+                public void onResponse(Call<List<Exercise>> call, Response<List<Exercise>> response) {
+
+                    // Checking for Response
+                    if (response.code() == 200) { // HTTP Response OK
+
+                        List<Exercise> data = response.body();
+                        item.setNumber_of_exercise(data.size());
+                        workoutAdapter.notifyDataSetChanged();
+
+                    } else {
+                        Toast.makeText(result.getContext(), "\"Unable to collect the data... Please Check your connection\"", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<List<Exercise>> call, Throwable t) {
+                    Toast.makeText(result.getContext(), "API Failed !", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+
+
+        /////////////////////////////////////
+        recyclerView.scrollToPosition(items.size() - 2);
 
         return result;
     }
@@ -156,5 +132,18 @@ public class WorkoutFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    public HashMap<String, String> initWorkoutList() {
+        HashMap<String, String> workoutList = new HashMap<String, String>();
+        workoutList.put("Cardio", "cardio");
+        workoutList.put("Olympic Weight Lifting", "olympic_weightlifting");
+        workoutList.put("Plyometrics", "plyometrics");
+        workoutList.put("Power Lifting", "powerlifting");
+        workoutList.put("Strenght", "strength");
+        workoutList.put("Stretching", "stretching");
+        workoutList.put("Strongman",  "strongman");
+
+        return workoutList;
     }
 }

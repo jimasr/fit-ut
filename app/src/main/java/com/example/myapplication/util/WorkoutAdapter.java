@@ -32,7 +32,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
     @Override
     public void onBindViewHolder(@NonNull WorkoutHolder holder, int position) {
         holder.workout_title.setText(items.get(position).getType_name());
-        holder.number_of_exercise.setText(items.get(position).getNumber_of_exercise());
+        holder.number_of_exercise.setText(String.valueOf(items.get(position).getNumber_of_exercise()));
         holder.workout_image.setImageResource(items.get(position).getImage());
     }
 
