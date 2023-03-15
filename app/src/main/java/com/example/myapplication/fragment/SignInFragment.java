@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myapplication.AuthActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -61,9 +60,9 @@ public class SignInFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
         signUpLink = view.findViewById(R.id.signUpLink);
-        signInButton = view.findViewById(R.id.signInButton);
-        emailInput = view.findViewById(R.id.emailLoginInput);
-        passwordInput = view.findViewById(R.id.passwordLoginInput);
+        signInButton = view.findViewById(R.id.signUpButton);
+        emailInput = view.findViewById(R.id.emailSignUpInput);
+        passwordInput = view.findViewById(R.id.passwordSignUpInput);
 
         signUpLink.setOnClickListener(new View.OnClickListener() {
             @Override

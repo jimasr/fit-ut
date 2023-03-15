@@ -30,7 +30,7 @@
             android:layout_below="@+id/loginImage"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailLogin"
+            android:id="@+id/emailSignUpText"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             android:layout_centerHorizontal="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/emailLoginInput"
+                android:id="@+id/emailSignUpInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
@@ -48,17 +48,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordLoginText"
+            android:id="@+id/passwordSignUpText"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_below="@+id/emailLogin"
+            android:layout_below="@+id/emailSignUpText"
             android:layout_centerHorizontal="true"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordLoginInput"
+                android:id="@+id/passwordSignUpInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
@@ -67,21 +67,21 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/signInButton"
+            android:id="@+id/signUpButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="90dp"
             android:padding="5dp"
             android:text="Login"
-            android:layout_below="@+id/passwordLoginText"
+            android:layout_below="@+id/passwordSignUpText"
             android:background="@drawable/rounded_corner"/>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/signInButton"
+            android:layout_below="@+id/signUpButton"
             android:orientation="horizontal"
             android:gravity="center">
 
