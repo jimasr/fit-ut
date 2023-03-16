@@ -1,6 +1,7 @@
 package com.example.myapplication.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -35,6 +37,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +46,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 
@@ -57,6 +61,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private List<Place> placeList;
+    private CardView cardView;
 
 
     public HomeFragment() {
@@ -81,10 +86,28 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
         mapView = view.findViewById(R.id.mapView);
+        cardView = view.findViewById(R.id.cardView);
+
         initGoogleMap(savedInstanceState);
+        initProfile();
 
         return view;
+    }
+
+    private void initProfile() {
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SettingsFragment settingsFragment = new SettingsFragment();
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.relativelayout, settingsFragment)
+                        .commit();
+            }
+        });
+
     }
 
     private void initGoogleMap(Bundle savedInstanceState){
@@ -116,6 +139,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         locationRequest.setInterval(120000);
         locationRequest.setFastestInterval(120000);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        Places.initialize(getContext(), BuildConfig.MAPS_API_KEY);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getContext(),
@@ -143,7 +167,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             if (locationList.size() > 0) {
                 //The last location in the list is the newest
                 Location location = locationList.get(locationList.size() - 1);
-                Log.i("HomeFragment", "Location: " + location.getLatitude() + " " + location.getLongitude());
                 lastLocation = location;
                 if (currentLocation != null) {
                     currentLocation.remove();
@@ -151,6 +174,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                 //Place current location marker
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
 
                 //Location marker
                 MarkerOptions markerOptions = new MarkerOptions();
@@ -256,22 +280,28 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         JSONObject jsonObject = fetchData.getJsonObject();
 
         try {
-            JSONArray jsonArray = jsonObject.getJSONArray("results");
 
-            for(int i=0; i<jsonArray.length(); i++) {
-                JSONObject data = jsonArray.getJSONObject(i);
-                String name = data.getString("name");
-                String vicinity = data.getString("vicinity");
-                String lat = data.getJSONObject("geometry").getJSONObject("location").getString("lat");
-                String lng = data.getJSONObject("geometry").getJSONObject("location").getString("lng");
+            if(jsonObject != null) {
 
-                Place place = new Place(name, vicinity, new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
-                placeList.add(place);
+                JSONArray jsonArray = jsonObject.getJSONArray("results");
+
+                for(int i=0; i<jsonArray.length(); i++) {
+                    JSONObject data = jsonArray.getJSONObject(i);
+                    String name = data.getString("name");
+                    String vicinity = data.getString("vicinity");
+                    String lat = data.getJSONObject("geometry").getJSONObject("location").getString("lat");
+                    String lng = data.getJSONObject("geometry").getJSONObject("location").getString("lng");
+
+                    Place place = new Place(name, vicinity, new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
+                    placeList.add(place);
+                }
             }
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
+
     }
 
 }

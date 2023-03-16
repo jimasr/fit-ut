@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "742410437068",
+    "project_id": "fit-ut",
+    "storage_bucket": "fit-ut.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742410437068:android:419c19efc8747d70da5d69",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "742410437068-vefbp27uocmk31msaf3gefauueg6tbt6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNj0xIgORt3Oiz_Rjs-9bfbmhTxMxDekg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "742410437068-vefbp27uocmk31msaf3gefauueg6tbt6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
