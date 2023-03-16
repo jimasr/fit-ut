@@ -22,6 +22,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.regex.Pattern;
 
@@ -101,13 +102,14 @@ public class SignUpFragment extends Fragment {
                     valid = false;
                 }
 
-                if(!Pattern.compile(PASSWORD_PATTERN).matcher(password).matches()) {
+                if(valid && !Pattern.compile(PASSWORD_PATTERN).matcher(password).matches()) {
                     Toast.makeText(getActivity(), "Password must contain a digit, an uppercase and lowercase letter, a special character and be above 6 characters!",
                             Toast.LENGTH_SHORT).show();
+                    valid = false;
                 }
 
                 if(valid) {
-                    signUpEmail(email, password);
+                    signUpEmail(name, email, password);
                 }
             }
         });
@@ -115,7 +117,7 @@ public class SignUpFragment extends Fragment {
         return view;
     }
 
-    public void signUpEmail(String email, String password) {
+    private void signUpEmail(String name, String email, String password) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -126,6 +128,9 @@ public class SignUpFragment extends Fragment {
 
                             Toast.makeText(getContext(), "Successfully created an account",
                                     Toast.LENGTH_SHORT).show();
+
+                            setupUser(name);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("AuthActivity", "Account creation failed", task.getException());
@@ -134,5 +139,26 @@ public class SignUpFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    private void setupUser(String name) {
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build();
+
+
+        user.updateProfile(changeRequest)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("AuthActivity", "User profile updated.");
+                        }
+                    }
+                });
+
     }
 }

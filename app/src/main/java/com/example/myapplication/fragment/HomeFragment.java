@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -38,6 +40,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +66,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private List<Place> placeList;
     private CardView cardView;
+    private TextView profileTextView;
 
 
     public HomeFragment() {
@@ -89,7 +94,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         mapView = view.findViewById(R.id.mapView);
         cardView = view.findViewById(R.id.cardView);
+        profileTextView = view.findViewById(R.id.profileTextView);
 
+        updateUI();
         initGoogleMap(savedInstanceState);
         initProfile();
 
@@ -300,8 +307,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
 
 
+    private void updateUI() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            Uri photoUrl = user.getPhotoUrl();
+
+            profileTextView.setText("Hi " + name);
+
+
+        }
     }
 
 }
