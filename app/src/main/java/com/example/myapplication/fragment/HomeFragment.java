@@ -318,8 +318,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             Uri photoUrl = user.getPhotoUrl();
 
             profileTextView.setText("Hi " + name);
-
-
         }
     }
 

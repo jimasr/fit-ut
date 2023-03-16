@@ -54,8 +54,8 @@
                 android:id="@+id/nameTextInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Full Name"
-                android:textSize="14dp" />
+                android:hint=""
+                android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,8 +72,8 @@
                 android:id="@+id/emailTextInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
-                android:textSize="14dp" />
+                android:hint=""
+                android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,8 +92,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:hint="Password"
-                android:textSize="14dp" />
+                android:hint=""
+                android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
