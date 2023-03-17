@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -68,7 +67,7 @@ public class WorkoutFragment extends Fragment {
                     if (response.code() == 200) { // HTTP Response OK
 
                         List<Exercise> data = response.body();
-                        item.setNumber_of_exercise(data.size());
+                        item.setNumberOfExercise(data.size());
                         workoutAdapter.notifyDataSetChanged();
 
                     } else {
