@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -11,32 +12,76 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.api.APIClient;
+import com.example.myapplication.api.APIInterface;
+import com.example.myapplication.entity.Exercise;
 import com.example.myapplication.util.WorkoutAdapter;
 import com.example.myapplication.util.WorkoutItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WorkoutFragment extends Fragment {
 
     private static final String TAG = "WorkoutActivity";
+
+    private static final String BASE_URL = "https://api.api-ninjas.com/";
+    private static APIInterface apiInterface;
+    private Call<List<Exercise>> listWorkoutCall;
+    private HashMap<String, String> LIST_OF_TYPE;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View result = inflater.inflate(R.layout.fragment_workout, container, false);
 
-        RecyclerView recyclerView = result.findViewById(R.id.workout_recyclerview);
-
         List<WorkoutItem> items = new ArrayList<WorkoutItem>();
-        //Test
-        items.add(new WorkoutItem("Cardio", "10", R.drawable.cardio));
-        items.add(new WorkoutItem("Strength", "15", R.drawable.strength));
-        items.add(new WorkoutItem("Stretching", "2", R.drawable.stretching));
+        LIST_OF_TYPE = initWorkoutList();
+        RecyclerView recyclerView = result.findViewById(R.id.workout_recyclerview);
+        WorkoutAdapter workoutAdapter = new WorkoutAdapter(result.getContext(), items);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(result.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new WorkoutAdapter(result.getContext(), items));
+        recyclerView.setAdapter(workoutAdapter);
+
+        // Retrofit for fetching the data from the API Ninja
+        apiInterface = APIClient.getClient(BASE_URL).create(APIInterface.class);
+
+        for (String type: LIST_OF_TYPE.keySet()) {
+            WorkoutItem item = new WorkoutItem(type, 0);
+            items.add(item);
+
+            // Calling the API
+            listWorkoutCall = apiInterface.getDataByType(LIST_OF_TYPE.get(type));
+            listWorkoutCall.enqueue(new Callback<List<Exercise>>() {
+                @Override
+                public void onResponse(Call<List<Exercise>> call, Response<List<Exercise>> response) {
+
+                    // Checking for Response
+                    if (response.code() == 200) { // HTTP Response OK
+
+                        List<Exercise> data = response.body();
+                        item.setNumberOfExercise(data.size());
+                        workoutAdapter.notifyDataSetChanged();
+
+                    } else {
+                        Toast.makeText(result.getContext(), "\"Unable to collect the data... Please Check your connection\"", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                }
+                @Override
+                public void onFailure(Call<List<Exercise>> call, Throwable t) {
+                    Toast.makeText(result.getContext(), "API Failed !", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         return result;
     }
@@ -81,5 +126,25 @@ public class WorkoutFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    /**
+     * Use this method to initialize the list of workout types
+     * by using a HashMap structure with the title of the workout as key
+     * and the parameter of this workout for the API call as value
+     *
+     * @return A HashMap of possible type of Workout
+     */
+    public HashMap<String, String> initWorkoutList() {
+        HashMap<String, String> workoutList = new HashMap<String, String>();
+        workoutList.put("Cardio", "cardio");
+        workoutList.put("Olympic Weight Lifting", "olympic_weightlifting");
+        workoutList.put("Plyometrics", "plyometrics");
+        workoutList.put("Power Lifting", "powerlifting");
+        workoutList.put("Strenght", "strength");
+        workoutList.put("Stretching", "stretching");
+        workoutList.put("Strongman",  "strongman");
+
+        return workoutList;
     }
 }

@@ -11,14 +11,14 @@ import com.example.myapplication.R;
 
 public class WorkoutHolder extends RecyclerView.ViewHolder {
 
-    TextView workout_title;
-    TextView number_of_exercise;
-    ImageView workout_image;
+    TextView workoutTitle;
+    TextView numberOfExercise;
+    ImageView workoutImage;
 
     public WorkoutHolder(@NonNull View itemView) {
         super(itemView);
-        workout_title = itemView.findViewById(R.id.workout_title);
-        number_of_exercise = itemView.findViewById(R.id.number_exercise);
-        workout_image = itemView.findViewById(R.id.workout_imageview);
+        workoutTitle = itemView.findViewById(R.id.workout_title);
+        numberOfExercise = itemView.findViewById(R.id.number_exercise);
+        workoutImage = itemView.findViewById(R.id.workout_imageview);
     }
 }
