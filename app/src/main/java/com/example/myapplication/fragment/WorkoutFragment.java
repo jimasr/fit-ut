@@ -55,9 +55,10 @@ public class WorkoutFragment extends Fragment {
         apiInterface = APIClient.getClient(BASE_URL).create(APIInterface.class);
 
         for (String type: LIST_OF_TYPE.keySet()) {
-            WorkoutItem item = new WorkoutItem(type, 0, R.drawable.default_illustration);
+            WorkoutItem item = new WorkoutItem(type, 0);
             items.add(item);
 
+            // Calling the API
             listWorkoutCall = apiInterface.getDataByType(LIST_OF_TYPE.get(type));
             listWorkoutCall.enqueue(new Callback<List<Exercise>>() {
                 @Override
@@ -76,18 +77,12 @@ public class WorkoutFragment extends Fragment {
                     }
 
                 }
-
                 @Override
                 public void onFailure(Call<List<Exercise>> call, Throwable t) {
                     Toast.makeText(result.getContext(), "API Failed !", Toast.LENGTH_SHORT).show();
                 }
             });
         }
-
-
-
-        /////////////////////////////////////
-        recyclerView.scrollToPosition(items.size() - 2);
 
         return result;
     }
@@ -134,6 +129,13 @@ public class WorkoutFragment extends Fragment {
         }
     }
 
+    /**
+     * Use this method to initialize the list of workout types
+     * by using a HashMap structure with the title of the workout as key
+     * and the parameter of this workout for the API call as value
+     *
+     * @return A HashMap of possible type of Workout
+     */
     public HashMap<String, String> initWorkoutList() {
         HashMap<String, String> workoutList = new HashMap<String, String>();
         workoutList.put("Cardio", "cardio");

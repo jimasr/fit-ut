@@ -1,5 +1,7 @@
 package com.example.myapplication.util;
 
+import com.example.myapplication.R;
+
 public class WorkoutItem {
     String type_name;
     int number_of_exercise;
@@ -14,7 +16,7 @@ public class WorkoutItem {
     public WorkoutItem(String type_name, int number_of_exercise) {
         this.type_name = type_name;
         this.number_of_exercise = number_of_exercise;
-        this.image = 0;
+        this.image = R.drawable.default_illustration;
     }
 
     public String getType_name() {

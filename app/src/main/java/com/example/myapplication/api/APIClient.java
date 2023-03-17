@@ -1,7 +1,5 @@
 package com.example.myapplication.api;
 
-//import com.example.myapplication.pojo.MultipleResource;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
