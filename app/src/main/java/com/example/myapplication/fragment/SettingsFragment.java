@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.AuthActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.util.StorageManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,6 +69,7 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        redirect();
         super.onCreate(savedInstanceState);
     }
 
@@ -84,7 +86,6 @@ public class SettingsFragment extends Fragment {
         saveButton = view.findViewById(R.id.saveButton);
         logoutButton = view.findViewById(R.id.logoutButton);
         updateUI();
-
 
         galleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -130,6 +131,10 @@ public class SettingsFragment extends Fragment {
                 logout();
             }
         });
+
+        if(redirect()) {
+            return null;
+        }
 
         return view;
     }
@@ -277,5 +282,28 @@ public class SettingsFragment extends Fragment {
 
     private void logout() {
         FirebaseAuth.getInstance().signOut();
+        updateUI();
+    }
+
+    /**
+     * Redirect user to authentication page if not logged in
+     * @return
+     */
+    private boolean redirect() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user == null) {
+            Intent loginIntent = new Intent(getActivity(), AuthActivity.class);
+            startActivity(loginIntent);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onResume() {
+        redirect();
+        super.onResume();
     }
 }
