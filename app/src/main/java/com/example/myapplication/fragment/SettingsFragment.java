@@ -12,25 +12,29 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.R;
+import com.example.myapplication.util.StorageManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.net.URL;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,8 +49,9 @@ public class SettingsFragment extends Fragment {
     private TextInputEditText passwordTextInput;
     private TextView editPhoto;
     private ImageView profilePhoto;
-    private FirebaseStorage storage;
     private Uri imageUri;
+    private StorageManager storageManager;
+    private Button saveButton;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -74,8 +79,8 @@ public class SettingsFragment extends Fragment {
         emailTextInput = view.findViewById(R.id.emailTextInput);
         passwordTextInput = view.findViewById(R.id.passwordTextInput);
         editPhoto = view.findViewById(R.id.editPhoto);
-        profilePhoto = view.findViewById(R.id.profileView);
-        storage = FirebaseStorage.getInstance();
+        profilePhoto = view.findViewById(R.id.profileImage);
+        saveButton = view.findViewById(R.id.saveButton);
         updateUI();
 
 
@@ -86,6 +91,10 @@ public class SettingsFragment extends Fragment {
                         Intent intent = result.getData();
                         imageUri = intent.getData();
                         profilePhoto.setImageURI(imageUri);
+                        getContext().getContentResolver().takePersistableUriPermission(
+                                imageUri,
+                                (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        );
                     }
                 }
         );
@@ -105,6 +114,13 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateProfile();
+                uploadImage();
+            }
+        });
 
         return view;
     }
@@ -119,6 +135,7 @@ public class SettingsFragment extends Fragment {
             String password = "*******";
 
             if(photoUrl != null) {
+                Log.i("SettingsFragment", photoUrl.toString());
                 profilePhoto.setImageURI(photoUrl);
             }
 
@@ -159,7 +176,6 @@ public class SettingsFragment extends Fragment {
     }
 
     private Uri createImage(){
-        StorageReference imageReference = storage.getReference().child("images");
 
         Uri uri = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
         ContentResolver contentResolver = getContext().getContentResolver();
@@ -182,5 +198,71 @@ public class SettingsFragment extends Fragment {
             }, 100);
         }
         return true;
+    }
+
+    private void uploadImage() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(imageUri != null && user != null) {
+            storageManager = StorageManager.getInstance();
+            storageManager.updateImage(user, imageUri);
+        }
+    }
+
+    private void updateProfile() {
+        String name = nameTextInput.getText().toString();
+        String email = emailTextInput.getText().toString();
+        String password = passwordTextInput.getText().toString();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(!name.isEmpty() ? name : user.getDisplayName())
+                .setPhotoUri(imageUri)
+                .build();
+
+        if(!email.isEmpty()) {
+            updateEmail(user, email);
+        }
+
+        if(!password.isEmpty()) {
+            updatePassword(user, password);
+        }
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Profile successfully updated", Toast.LENGTH_SHORT).show();
+                            Log.d("SettingsFragment", "User profile updated.");
+                        }
+                    }
+                });
+
+    }
+
+    private void updateEmail(FirebaseUser user, String email) {
+        user.updateEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("SettingsFragment", "User email address updated.");
+                        }
+                    }
+                });
+    }
+
+    private void updatePassword(FirebaseUser user, String password) {
+        user.updatePassword(password)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("SettingsFragment", "User password updated.");
+                        }
+                    }
+                });
     }
 }
