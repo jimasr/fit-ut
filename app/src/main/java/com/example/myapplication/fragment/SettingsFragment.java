@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.AuthActivity;
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.util.StorageManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -69,7 +70,7 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        redirect();
+        redirectLogin();
         super.onCreate(savedInstanceState);
     }
 
@@ -132,7 +133,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        if(redirect()) {
+        if(redirectLogin()) {
             return null;
         }
 
@@ -160,6 +161,9 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    /**
+     * Launch intent to set profile photo
+     */
     private void launchImagePicker() {
         String[] choice = {"Gallery", "Camera"};
 
@@ -189,6 +193,10 @@ public class SettingsFragment extends Fragment {
         dialog.show();
     }
 
+    /**
+     * Create image from camera and save to gallery
+     * @return Uri of the inserted image
+     */
     private Uri createImage(){
 
         Uri uri = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
@@ -204,6 +212,10 @@ public class SettingsFragment extends Fragment {
         return finalURI;
     }
 
+    /**
+     * Request camera permission
+     * @return True
+     */
     private boolean requestCameraPermission() {
         if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -214,6 +226,9 @@ public class SettingsFragment extends Fragment {
         return true;
     }
 
+    /**
+     * Upload image to Firebase
+     */
     private void uploadImage() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -256,6 +271,11 @@ public class SettingsFragment extends Fragment {
 
     }
 
+    /**
+     * Update email
+     * @param user
+     * @param email
+     */
     private void updateEmail(FirebaseUser user, String email) {
         user.updateEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -268,6 +288,11 @@ public class SettingsFragment extends Fragment {
                 });
     }
 
+    /**
+     * Update password
+     * @param user
+     * @param password
+     */
     private void updatePassword(FirebaseUser user, String password) {
         user.updatePassword(password)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -280,16 +305,22 @@ public class SettingsFragment extends Fragment {
                 });
     }
 
+    /**
+     * Logout user
+     */
     private void logout() {
         FirebaseAuth.getInstance().signOut();
         updateUI();
+        redirectHome();
+
+        Toast.makeText(getContext(), "Logged out", Toast.LENGTH_SHORT).show();
     }
 
     /**
      * Redirect user to authentication page if not logged in
      * @return
      */
-    private boolean redirect() {
+    private boolean redirectLogin() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if(user == null) {
@@ -301,9 +332,17 @@ public class SettingsFragment extends Fragment {
         return false;
     }
 
+    private void redirectHome() {
+        Intent homeIntent = new Intent(getActivity(), MainActivity.class);
+        startActivity(homeIntent);
+    }
+
+    /**
+     * Check for redirection
+     */
     @Override
     public void onResume() {
-        redirect();
+        redirectLogin();
         super.onResume();
     }
 }
