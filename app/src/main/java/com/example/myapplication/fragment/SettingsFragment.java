@@ -52,6 +52,7 @@ public class SettingsFragment extends Fragment {
     private Uri imageUri;
     private StorageManager storageManager;
     private Button saveButton;
+    private Button logoutButton;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -81,6 +82,7 @@ public class SettingsFragment extends Fragment {
         editPhoto = view.findViewById(R.id.editPhoto);
         profilePhoto = view.findViewById(R.id.profileImage);
         saveButton = view.findViewById(R.id.saveButton);
+        logoutButton = view.findViewById(R.id.logoutButton);
         updateUI();
 
 
@@ -119,6 +121,13 @@ public class SettingsFragment extends Fragment {
             public void onClick(View view) {
                 updateProfile();
                 uploadImage();
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
             }
         });
 
@@ -264,5 +273,9 @@ public class SettingsFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    private void logout() {
+        FirebaseAuth.getInstance().signOut();
     }
 }
