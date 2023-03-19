@@ -1,14 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.ExerciseFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/exercise_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+
+        android:scaleType="centerCrop"
+        android:background="@drawable/default_illustration"/>
+
+    <ImageButton
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+
+        android:layout_margin="20dp"
+
+        android:background="@drawable/previous_button"/>
+
+    <TextView
+        android:id="@+id/exercise_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Exercise Title"
+        android:textSize="35dp"
+        android:textColor="@color/black"
+
+        android:layout_marginTop="20dp"
+
+        android:layout_below="@id/exercise_image"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/exercise_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="50dp"
+
+        android:layout_below="@id/exercise_title"/>
+
+</RelativeLayout>

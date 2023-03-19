@@ -7,8 +7,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.util.WorkoutItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +19,31 @@ import com.example.myapplication.R;
  * create an instance of this fragment.
  */
 public class ExerciseFragment extends Fragment {
+
+    private static View result;
+    private static WorkoutItem workoutItem;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        result = inflater.inflate(R.layout.fragment_exercise, container, false);
+
+        ImageView exerciseImage = result.findViewById(R.id.exercise_image);
+        TextView exerciseTitle = result.findViewById(R.id.exercise_title);
+
+
+        Bundle bundle = this.getArguments();
+
+        if (bundle != null) {
+            workoutItem = bundle.getParcelable("Workout");
+
+            exerciseImage.setImageResource(workoutItem.getImage());
+            exerciseTitle.setText(workoutItem.getTypeName());
+        }
+
+        return result;
+    }
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,14 +83,5 @@ public class ExerciseFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_exercise, container, false);
-
-
     }
 }
