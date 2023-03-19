@@ -1,12 +1,17 @@
 package com.example.myapplication.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +20,10 @@ import com.example.myapplication.R;
 import com.example.myapplication.api.APIClient;
 import com.example.myapplication.api.APIInterface;
 import com.example.myapplication.entity.Exercise;
+import com.example.myapplication.util.FragmentChangeListener;
 import com.example.myapplication.util.WorkoutAdapter;
 import com.example.myapplication.util.WorkoutItem;
+import com.example.myapplication.util.WorkoutItemClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,10 +33,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WorkoutFragment extends Fragment {
+public class WorkoutFragment extends Fragment implements FragmentChangeListener {
 
     private static final String TAG = "WorkoutActivity";
-
+    private static RecyclerView recyclerView;
+    private static WorkoutAdapter workoutAdapter;
     private static final String BASE_URL = "https://api.api-ninjas.com/";
     private static APIInterface apiInterface;
     private Call<List<Exercise>> listWorkoutCall;
@@ -43,8 +51,8 @@ public class WorkoutFragment extends Fragment {
 
         List<WorkoutItem> items = new ArrayList<WorkoutItem>();
         LIST_OF_TYPE = initWorkoutList();
-        RecyclerView recyclerView = result.findViewById(R.id.workout_recyclerview);
-        WorkoutAdapter workoutAdapter = new WorkoutAdapter(result.getContext(), items);
+        recyclerView = result.findViewById(R.id.workout_recyclerview);
+        workoutAdapter = new WorkoutAdapter(result.getContext(), items);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(result.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -82,6 +90,8 @@ public class WorkoutFragment extends Fragment {
                 }
             });
         }
+
+        configureOnClickRecyclerView();
 
         return result;
     }
@@ -146,5 +156,28 @@ public class WorkoutFragment extends Fragment {
         workoutList.put("Strongman",  "strongman");
 
         return workoutList;
+    }
+
+
+    private void configureOnClickRecyclerView(){
+        WorkoutItemClickListener.addTo(recyclerView, R.layout.fragment_workout)
+                .setOnItemClickListener(new WorkoutItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        WorkoutItem workoutItem = workoutAdapter.getWorkoutItem(position);
+                        Toast.makeText(getContext(),"You clicked on " + workoutItem.getTypeName(),Toast.LENGTH_SHORT).show();
+
+                        replaceFragment(new ExerciseFragment());
+                    }
+                });
+    }
+
+    @Override
+    public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.relativelayout, fragment);
+        fragmentTransaction.addToBackStack(fragment.toString());
+        fragmentTransaction.commit();
     }
 }
