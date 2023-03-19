@@ -27,9 +27,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="3dp"
-                    android:text="Hi, Jane"
+                    android:text="Hi, Guest"
                     android:textColor="@color/black"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/commentsTextView"
@@ -38,7 +38,7 @@
                     android:layout_below="@+id/profileTextView"
                     android:text="Let's check your activity"
                     android:textColor="@color/black"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView"
@@ -50,7 +50,7 @@
                     android:layout_centerHorizontal="true">
 
                     <ImageView
-                        android:id="@+id/profileView"
+                        android:id="@+id/profileImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:scaleType="centerCrop"
@@ -102,7 +102,7 @@
                             android:layout_height="wrap_content"
                             android:padding="10dp"
                             android:text="Completed Workout"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textAlignment="center"/>
 
                     </LinearLayout>
@@ -153,7 +153,7 @@
                                 android:layout_height="wrap_content"
                                 android:padding="5dp"
                                 android:text="Workouts"
-                                android:textSize="12dp"
+                                android:textSize="12sp"
                                 android:textAlignment="center"/>
 
                         </LinearLayout>
@@ -208,7 +208,7 @@
                                 android:layout_height="wrap_content"
                                 android:padding="5dp"
                                 android:text="Minutes"
-                                android:textSize="12dp"
+                                android:textSize="12sp"
                                 android:textAlignment="center"/>
 
                         </LinearLayout>

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -67,6 +68,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private List<Place> placeList;
     private CardView cardView;
     private TextView profileTextView;
+    private ImageView profileImage;
 
 
     public HomeFragment() {
@@ -95,6 +97,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mapView = view.findViewById(R.id.mapView);
         cardView = view.findViewById(R.id.cardView);
         profileTextView = view.findViewById(R.id.profileTextView);
+        profileImage = view.findViewById(R.id.profileImage);
 
         updateUI();
         initGoogleMap(savedInstanceState);
@@ -318,8 +321,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             Uri photoUrl = user.getPhotoUrl();
 
             profileTextView.setText("Hi " + name);
-
-
+            profileImage.setImageURI(photoUrl);
         }
     }
 
