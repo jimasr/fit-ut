@@ -71,8 +71,7 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="10dp"
-                    app:cardBackgroundColor="#f2f2f2"
-                    app:cardElevation="5dp">
+                    app:cardBackgroundColor="#f2f2f2">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -113,10 +112,9 @@
                     android:id="@+id/inProgressWorkoutCard"
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginStart="40dp"
                     app:cardCornerRadius="10dp"
                     app:cardBackgroundColor="#f2f2f2"
-                    app:cardElevation="10dp"
                     android:layout_toRightOf="@+id/completedWorkoutCard">
 
                     <LinearLayout
@@ -145,7 +143,7 @@
                                 android:layout_height="wrap_content"
                                 android:padding="5dp"
                                 android:text="2"
-                                android:textSize="20dp"
+                                android:textSize="20sp"
                                 android:textColor="@color/black"/>
 
                             <TextView
@@ -166,11 +164,10 @@
                     android:id="@+id/timeSpentCard"
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginStart="40dp"
                     android:layout_marginTop="20dp"
                     app:cardCornerRadius="10dp"
                     app:cardBackgroundColor="#f2f2f2"
-                    app:cardElevation="10dp"
                     android:layout_toRightOf="@+id/completedWorkoutCard"
                     android:layout_below="@+id/inProgressWorkoutCard">
 
@@ -200,7 +197,7 @@
                                 android:layout_height="wrap_content"
                                 android:padding="5dp"
                                 android:text="2000"
-                                android:textSize="20dp"
+                                android:textSize="20sp"
                                 android:textColor="@color/black"/>
 
                             <TextView
@@ -231,7 +228,7 @@
                     android:padding="20dp"
                     android:text="Discover new workouts"
                     android:textColor="@color/black"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -243,6 +240,7 @@
                         android:layout_height="wrap_content">
 
                         <ImageButton
+                            android:contentDescription="Discover Cardio"
                             android:id="@+id/cardioImageButton"
                             android:layout_width="240dp"
                             android:layout_height="150dp"
@@ -250,6 +248,7 @@
                             android:background="@drawable/cardio" />
 
                         <ImageButton
+                            android:contentDescription="Discover Strength"
                             android:id="@+id/strengthImageButton"
                             android:layout_width="240dp"
                             android:layout_height="150dp"
@@ -257,6 +256,7 @@
                             android:background="@drawable/strength" />
 
                         <ImageButton
+                            android:contentDescription="Discover Stretching"
                             android:id="@+id/stretchingImageButton"
                             android:layout_width="240dp"
                             android:layout_height="150dp"
@@ -264,6 +264,7 @@
                             android:background="@drawable/stretching" />
 
                         <ImageButton
+                            android:contentDescription="Discover Strongman"
                             android:id="@+id/strongmanImageButton"
                             android:layout_width="240dp"
                             android:layout_height="150dp"
@@ -288,9 +289,10 @@
                     android:padding="20dp"
                     android:text="Discover nearby gym"
                     android:textColor="@color/black"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <com.google.android.gms.maps.MapView
+                    android:contentDescription="Map"
                     android:id="@+id/mapView"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
