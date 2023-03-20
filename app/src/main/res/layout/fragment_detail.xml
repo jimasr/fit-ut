@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.DetailFragment">
+
+    <ImageButton
+        android:id="@+id/exercise_previous_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+
+        android:layout_margin="25dp"
+
+        android:background="@drawable/default_illustration"/>
+
+    <TextClock
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="75dp"
+
+        android:text="00:00"
+        android:textSize="30dp"
+        android:textColor="@color/purple_700"
+
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/exercise_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Name"
+        android:textSize="25dp"
+        android:textStyle="bold"
+
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/chronometer"/>
+
+    <TextView
+        android:id="@+id/exercise_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+
+        android:text="Type :"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/exercise_name"/>
+
+    <TextView
+        android:id="@+id/exercise_muscle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+
+        android:text="Muscle targeted :"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+
+        android:layout_below="@id/exercise_type"/>
+
+    <TextView
+        android:id="@+id/exercise_equipment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+
+        android:text="Equipment : "
+        android:textSize="20dp"
+        android:textColor="@color/black"
+
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/exercise_muscle"/>
+
+    <TextView
+        android:id="@+id/exercise_difficulty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+
+        android:text="Difficulty :"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+
+        android:layout_below="@id/exercise_equipment"/>
+
+    <TextView
+        android:id="@+id/exercise_instructions_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+
+        android:text="Instructions :"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/purple_500"
+
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/exercise_difficulty"/>
+
+    <TextView
+        android:id="@+id/exercise_instructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+
+        android:text="Lorem ipsum dolor sit amet,
+         consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/exercise_instructions_title"/>
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:paddingHorizontal="75dp"
+
+        android:text="START"
+
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

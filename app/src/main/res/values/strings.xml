@@ -2,4 +2,6 @@
     <string name="app_name">FitUT</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="msg_token_fmt" formatted="true">Notification token:  %1$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
