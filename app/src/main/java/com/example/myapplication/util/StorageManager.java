@@ -1,12 +1,16 @@
 package com.example.myapplication.util;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -54,7 +58,16 @@ public class StorageManager {
         });
     }
 
-    public void retrieveData(FirebaseUser user) {
+    public void retrieveData(FirebaseUser user, ImageView view, Context context) {
+        if(user.getPhotoUrl() != null) {
+            String imageName = user.getPhotoUrl().getLastPathSegment();
+
+            StorageReference imageRef = storageRef.child(imageName);
+
+            Glide.with(context)
+                    .load(imageRef)
+                    .into(view);
+        }
 
     }
 

@@ -86,6 +86,8 @@ public class SettingsFragment extends Fragment {
         profilePhoto = view.findViewById(R.id.profileImage);
         saveButton = view.findViewById(R.id.saveButton);
         logoutButton = view.findViewById(R.id.logoutButton);
+        storageManager = StorageManager.getInstance();
+
         updateUI();
 
         galleryLauncher = registerForActivityResult(
@@ -151,7 +153,7 @@ public class SettingsFragment extends Fragment {
 
             if(photoUrl != null) {
                 Log.i("SettingsFragment", photoUrl.toString());
-                profilePhoto.setImageURI(photoUrl);
+                storageManager.retrieveData(user, profilePhoto, getContext());
             }
 
             nameTextInput.setHint(name);
@@ -202,6 +204,8 @@ public class SettingsFragment extends Fragment {
         Uri uri = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
         ContentResolver contentResolver = getContext().getContentResolver();
         String imageName = String.valueOf(System.currentTimeMillis());
+        Log.i("Image",imageName);
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, imageName + ".jpg");
         contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/");
