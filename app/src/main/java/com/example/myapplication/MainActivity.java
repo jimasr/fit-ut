@@ -8,7 +8,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 import com.example.myapplication.fragment.HomeFragment;
 import com.example.myapplication.fragment.WorkoutFragment;
 import com.example.myapplication.fragment.SettingsFragment;
+import com.example.myapplication.util.AppStatus;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -47,8 +51,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         bottomNavigationView.setOnItemSelectedListener(this);
         loadFragment(new HomeFragment());
 
-        askNotificationPermission();
-        fetchNotificationToken();
+        if(AppStatus.getInstance(this).isConnected()) {
+            askNotificationPermission();
+            fetchNotificationToken();
+        } else {
+            Toast.makeText(this, "Network not available", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
