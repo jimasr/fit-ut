@@ -27,6 +27,7 @@ import com.example.myapplication.BuildConfig;
 import com.example.myapplication.R;
 import com.example.myapplication.entity.Place;
 import com.example.myapplication.util.FetchData;
+import com.example.myapplication.util.StorageManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -69,6 +70,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private CardView cardView;
     private TextView profileTextView;
     private ImageView profileImage;
+    private StorageManager storageManager;
 
 
     public HomeFragment() {
@@ -87,6 +89,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        storageManager = StorageManager.getInstance();
     }
 
     @Override
@@ -321,7 +324,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             Uri photoUrl = user.getPhotoUrl();
 
             profileTextView.setText("Hi " + name);
-            profileImage.setImageURI(photoUrl);
+//            profileImage.setImageURI(photoUrl);
+            storageManager.retrieveData(user, profileImage, getContext());
+
         }
     }
 
