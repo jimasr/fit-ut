@@ -9,7 +9,7 @@ public class APIClient {
 
     private static Retrofit retrofit = null;
 
-    public static Retrofit getClient(String base_url) {
+    public static Retrofit getClient(String baseUrl) {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -17,7 +17,7 @@ public class APIClient {
 
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(base_url)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
