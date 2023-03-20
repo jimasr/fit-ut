@@ -39,7 +39,6 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
     private static final String BASE_URL = "https://api.api-ninjas.com/";
     private static APIInterface apiInterface;
     private Call<List<Exercise>> listWorkoutCall;
-    private HashMap<String, String> LIST_OF_TYPE;
 
 
     @Override
@@ -47,8 +46,7 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
         // Inflate the layout for this fragment
         View result = inflater.inflate(R.layout.fragment_workout, container, false);
 
-        List<WorkoutItem> items = new ArrayList<WorkoutItem>();
-        LIST_OF_TYPE = initWorkoutList();
+        List<WorkoutItem> items = initWorkoutList();
         recyclerView = result.findViewById(R.id.workout_recyclerview);
         workoutAdapter = new WorkoutAdapter(result.getContext(), items);
 
@@ -59,12 +57,10 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
         // Retrofit for fetching the data from the API Ninja
         apiInterface = APIClient.getClient(BASE_URL).create(APIInterface.class);
 
-        for (String type: LIST_OF_TYPE.keySet()) {
-            WorkoutItem item = new WorkoutItem(type, LIST_OF_TYPE.get(type), 0);
-            items.add(item);
+        for (WorkoutItem item: items) {
 
             // Calling the API
-            listWorkoutCall = apiInterface.getDataByType(LIST_OF_TYPE.get(type));
+            listWorkoutCall = apiInterface.getDataByType(item.getApiParam());
             listWorkoutCall.enqueue(new Callback<List<Exercise>>() {
                 @Override
                 public void onResponse(Call<List<Exercise>> call, Response<List<Exercise>> response) {
@@ -143,16 +139,15 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
      *
      * @return A HashMap of possible type of Workout
      */
-    public HashMap<String, String> initWorkoutList() {
-        HashMap<String, String> workoutList = new HashMap<String, String>();
-        workoutList.put("Cardio", "cardio");
-        workoutList.put("Olympic Weight Lifting", "olympic_weightlifting");
-        workoutList.put("Plyometrics", "plyometrics");
-        workoutList.put("Power Lifting", "powerlifting");
-        workoutList.put("Strenght", "strength");
-        workoutList.put("Stretching", "stretching");
-        workoutList.put("Strongman",  "strongman");
-
+    public ArrayList<WorkoutItem> initWorkoutList() {
+        ArrayList<WorkoutItem> workoutList = new ArrayList<WorkoutItem>();
+        workoutList.add(new WorkoutItem("Cardio", "cardio", 0, R.drawable.cardio_workout));
+        workoutList.add(new WorkoutItem("Olympic Weight Lifting", "olympic_weightlifting", 0, R.drawable.olympic_workout));
+        workoutList.add(new WorkoutItem("Plyometrics", "plyometrics", 0, R.drawable.plyometric_workout));
+        workoutList.add(new WorkoutItem("Power Lifting", "powerlifting", 0, R.drawable.powerlifting_workout));
+        workoutList.add(new WorkoutItem("Strength", "strength", 0, R.drawable.strength_workout));
+        workoutList.add(new WorkoutItem("Stretching", "stretching", 0, R.drawable.stretching_workout));
+        workoutList.add(new WorkoutItem("Strongman",  "strongman", 0, R.drawable.strongman_workout));
         return workoutList;
     }
 

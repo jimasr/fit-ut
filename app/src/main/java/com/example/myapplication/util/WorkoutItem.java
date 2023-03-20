@@ -14,8 +14,9 @@ public class WorkoutItem implements Parcelable {
     int image;
 
 
-    public WorkoutItem(String typeName, int NumberOfExercise, int image) {
+    public WorkoutItem(String typeName, String apiParam, int NumberOfExercise, int image) {
         this.typeName = typeName;
+        this.apiParam = apiParam;
         this.numberOfExercise = NumberOfExercise;
         this.image = image;
     }
