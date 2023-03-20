@@ -32,6 +32,7 @@ import com.example.myapplication.entity.Place;
 import com.example.myapplication.pojo.maps.Geometry;
 import com.example.myapplication.pojo.maps.MapsPojo;
 import com.example.myapplication.pojo.maps.Result;
+import com.example.myapplication.util.AppStatus;
 import com.example.myapplication.util.FetchData;
 import com.example.myapplication.util.StorageManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -114,9 +115,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         profileTextView = view.findViewById(R.id.profileTextView);
         profileImage = view.findViewById(R.id.profileImage);
 
-        updateUI();
-        initGoogleMap(savedInstanceState);
-        initProfile();
+        if(AppStatus.getInstance(getContext()).isConnected()) {
+            updateUI();
+            initGoogleMap(savedInstanceState);
+            initProfile();
+        }
 
         return view;
     }
@@ -219,7 +222,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onPause() {
-        mapView.onPause();
+        if(AppStatus.getInstance(getContext()).isConnected()) mapView.onPause();
 
         if(fusedLocationProviderClient != null) {
             fusedLocationProviderClient.removeLocationUpdates(locationCallback);
@@ -229,31 +232,31 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onDestroy() {
-        mapView.onDestroy();
+        if(AppStatus.getInstance(getContext()).isConnected()) mapView.onDestroy();
         super.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
-        mapView.onLowMemory();
+        if(AppStatus.getInstance(getContext()).isConnected()) mapView.onLowMemory();
         super.onLowMemory();
     }
 
     @Override
     public void onResume() {
-        mapView.onResume();
+        if(AppStatus.getInstance(getContext()).isConnected()) mapView.onResume();
         super.onResume();
     }
 
     @Override
     public void onStart() {
-        mapView.onStart();
+        if(AppStatus.getInstance(getContext()).isConnected()) mapView.onStart();
         super.onStart();
     }
 
     @Override
     public void onStop() {
-        mapView.onStop();
+        if(AppStatus.getInstance(getContext()).isConnected()) mapView.onStop();
         super.onStop();
     }
 
