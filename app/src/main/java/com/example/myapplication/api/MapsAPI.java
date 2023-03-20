@@ -11,7 +11,6 @@ import retrofit2.http.Query;
 
 public interface MapsAPI {
 
-//https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=45.777387699793756%2C%204.893445424569205&radius=1000&type=gym&keyword=gym&key=AIzaSyCXlSLKISsXZTvwglXG6CXkPCvXroTJBDE
     @GET("/maps/api/place/nearbysearch/json")
     Call<MapsPojo> getPlaces(
             @Query("location") String location,
