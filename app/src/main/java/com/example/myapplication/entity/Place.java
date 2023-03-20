@@ -1,6 +1,7 @@
 package com.example.myapplication.entity;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.annotations.SerializedName;
 
 public class Place {
     private String name;

@@ -25,7 +25,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.BuildConfig;
 import com.example.myapplication.R;
+import com.example.myapplication.api.APIClient;
+import com.example.myapplication.api.APIInterface;
+import com.example.myapplication.api.MapsAPI;
 import com.example.myapplication.entity.Place;
+import com.example.myapplication.pojo.maps.Geometry;
+import com.example.myapplication.pojo.maps.MapsPojo;
+import com.example.myapplication.pojo.maps.Result;
 import com.example.myapplication.util.FetchData;
 import com.example.myapplication.util.StorageManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -55,9 +61,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
-    private static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/";
+    private static final String BASE_URL = "https://maps.googleapis.com";
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private MapView mapView;
@@ -71,6 +81,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private TextView profileTextView;
     private ImageView profileImage;
     private StorageManager storageManager;
+    private MapsAPI mapsAPI;
 
 
     public HomeFragment() {
@@ -90,6 +101,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
         storageManager = StorageManager.getInstance();
+        mapsAPI = APIClient.getClient(BASE_URL).create(MapsAPI.class);
     }
 
     @Override
@@ -198,13 +210,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                 //Gym marker
                 fetchPlaces(latLng);
-                for(Place place : placeList) {
-                    MarkerOptions marker = new MarkerOptions();
-                    marker.position(place.getLatLng());
-                    marker.title(place.getName());
-                    marker.icon(BitmapDescriptorFactory.defaultMarker());
-                    googleMap.addMarker(marker);
-                }
 
                 //move map camera
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
@@ -283,35 +288,62 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * Fetch nearby gym using Retrofit
+     * @param latLng Latitude and longitude origin
+     */
     private void fetchPlaces(LatLng latLng) {
         String latitude = String.valueOf(latLng.latitude);
         String longitude = String.valueOf(latLng.longitude);
-        String url = BASE_URL + "json?location=" + latitude + "%2C" + longitude + "&radius=1000&type=gym&keyword=gym&key=" + BuildConfig.MAPS_API_KEY;
         placeList = new ArrayList<>();
 
-        FetchData fetchData = new FetchData(url);
-        JSONObject jsonObject = fetchData.getJsonObject();
+        String location = latitude + "," + longitude;
+        String type = "gym";
+        String keyword = "gym";
 
-        try {
+        Call<MapsPojo> call = mapsAPI.getPlaces(location, 1000, type, keyword, BuildConfig.MAPS_API_KEY);
 
-            if(jsonObject != null) {
+        call.enqueue(new Callback<MapsPojo>() {
+            @Override
+            public void onResponse(Call<MapsPojo> call, Response<MapsPojo> response) {
+                if(response.code() == 200) {
+                    Log.i("HomeFragment", "Api call success");
 
-                JSONArray jsonArray = jsonObject.getJSONArray("results");
+                    MapsPojo mapsPojo = response.body();
+                    List<Result> results = mapsPojo.results;
 
-                for(int i=0; i<jsonArray.length(); i++) {
-                    JSONObject data = jsonArray.getJSONObject(i);
-                    String name = data.getString("name");
-                    String vicinity = data.getString("vicinity");
-                    String lat = data.getJSONObject("geometry").getJSONObject("location").getString("lat");
-                    String lng = data.getJSONObject("geometry").getJSONObject("location").getString("lng");
+                    Log.i("HomeFragment", results.toString());
 
-                    Place place = new Place(name, vicinity, new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
-                    placeList.add(place);
+                    for(Result result : results) {
+                        String name = result.name;
+                        String vicinity = result.vicinity;
+                        Double lat = result.geometry.location.lat;
+                        Double lng = result.geometry.location.lng;
+
+                        Place place = new Place(name, vicinity, new LatLng(lat, lng));
+                        Log.i("HomeFragment", name);
+                        placeList.add(place);
+                    }
+
+                    setPlacesMarker();
                 }
             }
 
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+            @Override
+            public void onFailure(Call<MapsPojo> call, Throwable t) {
+                Log.e("HomeFragment", "Nearby Places API fail");
+            }
+        });
+
+    }
+
+    private void setPlacesMarker() {
+        for(Place place : placeList) {
+            MarkerOptions marker = new MarkerOptions();
+            marker.position(place.getLatLng());
+            marker.title(place.getName());
+            marker.icon(BitmapDescriptorFactory.defaultMarker());
+            googleMap.addMarker(marker);
         }
     }
 
@@ -321,10 +353,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if (user != null) {
             // Name, email address, and profile photo Url
             String name = user.getDisplayName();
-            Uri photoUrl = user.getPhotoUrl();
 
             profileTextView.setText("Hi " + name);
-//            profileImage.setImageURI(photoUrl);
             storageManager.retrieveData(user, profileImage, getContext());
 
         }
