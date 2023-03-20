@@ -326,28 +326,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             Uri photoUrl = user.getPhotoUrl();
 
             profileTextView.setText("Hi " + name);
+            profileImage.setImageURI(photoUrl);
         }
-    }
-
-    private void openDirectory(Uri uriToLoad) {
-        // Choose a directory using the system's file picker.
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-
-        // Optionally, specify a URI for the directory that should be opened in
-        // the system file picker when it loads.
-        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uriToLoad);
-
-        ActivityResultLauncher<Intent> directoryLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if(result.getResultCode() == Activity.RESULT_OK) {
-                        Intent directoryIntent = result.getData();
-                        if(directoryIntent != null) {
-                            profileImage.setImageURI(uriToLoad);
-                        }
-                    }
-                }
-        );
     }
 
 }
