@@ -60,7 +60,7 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
         apiInterface = APIClient.getClient(BASE_URL).create(APIInterface.class);
 
         for (String type: LIST_OF_TYPE.keySet()) {
-            WorkoutItem item = new WorkoutItem(type, 0);
+            WorkoutItem item = new WorkoutItem(type, LIST_OF_TYPE.get(type), 0);
             items.add(item);
 
             // Calling the API
@@ -163,7 +163,6 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         WorkoutItem workoutItem = workoutAdapter.getWorkoutItem(position);
-                        Toast.makeText(getContext(),"You clicked on " + workoutItem.getTypeName(),Toast.LENGTH_SHORT).show();
 
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("Workout", workoutItem);

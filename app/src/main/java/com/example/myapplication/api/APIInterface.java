@@ -19,4 +19,8 @@ public interface APIInterface {
     @Headers("X-Api-Key:" + BuildConfig.NINJA_API_KEY)
     @GET("/v1/exercises")
     Call<List<Exercise>> getDataByType(@Query("type") String type);
+
+    @Headers("X-Api-Key:" + BuildConfig.NINJA_API_KEY)
+    @GET("/v1/exercises")
+    Call<List<Exercise>> getDataByMuscle(@Query("muscle") String type);
 }

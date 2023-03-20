@@ -9,8 +9,10 @@ import com.example.myapplication.R;
 
 public class WorkoutItem implements Parcelable {
     String typeName;
+    String apiParam;
     int numberOfExercise;
     int image;
+
 
     public WorkoutItem(String typeName, int NumberOfExercise, int image) {
         this.typeName = typeName;
@@ -18,8 +20,9 @@ public class WorkoutItem implements Parcelable {
         this.image = image;
     }
 
-    public WorkoutItem(String typeName, int NumberOfExercise) {
+    public WorkoutItem(String typeName, String apiParam, int NumberOfExercise) {
         this.typeName = typeName;
+        this.apiParam = apiParam;
         this.numberOfExercise = NumberOfExercise;
         this.image = R.drawable.default_illustration;
     }
@@ -48,6 +51,14 @@ public class WorkoutItem implements Parcelable {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public String getApiParam() {
+        return apiParam;
+    }
+
+    public void setApiParam(String apiParam) {
+        this.apiParam = apiParam;
     }
 
     public int getNumberOfExercise() {

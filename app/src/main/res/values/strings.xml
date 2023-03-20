@@ -2,4 +2,10 @@
     <string name="app_name">FitUT</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <style name="ShapeAppearanceOverlay.App.CornerBottomRounded" parent="">
+        <item name="cornerSizeBottomLeft">20%</item>
+        <item name="cornerSizeBottomRight">20%</item>
+    </style>
 </resources>
+
