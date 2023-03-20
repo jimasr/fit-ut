@@ -2,14 +2,17 @@ package com.example.myapplication.fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -321,8 +326,28 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             Uri photoUrl = user.getPhotoUrl();
 
             profileTextView.setText("Hi " + name);
-            profileImage.setImageURI(photoUrl);
         }
+    }
+
+    private void openDirectory(Uri uriToLoad) {
+        // Choose a directory using the system's file picker.
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+
+        // Optionally, specify a URI for the directory that should be opened in
+        // the system file picker when it loads.
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uriToLoad);
+
+        ActivityResultLauncher<Intent> directoryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if(result.getResultCode() == Activity.RESULT_OK) {
+                        Intent directoryIntent = result.getData();
+                        if(directoryIntent != null) {
+                            profileImage.setImageURI(uriToLoad);
+                        }
+                    }
+                }
+        );
     }
 
 }
