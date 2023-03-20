@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -66,6 +67,7 @@ public class StorageManager {
 
             Glide.with(context)
                     .load(imageRef)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(view);
         }
 
