@@ -2,7 +2,9 @@ package com.example.myapplication.util;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +28,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
     @NonNull
     @Override
     public WorkoutHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new WorkoutHolder(LayoutInflater.from(context).inflate(R.layout.workout_item, parent, false));
+        View view = LayoutInflater.from(context).inflate(R.layout.workout_item, parent, false);
+        return new WorkoutHolder(view);
     }
 
     @Override
@@ -41,4 +44,10 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
     public int getItemCount() {
         return items.size();
     }
+
+
+    public WorkoutItem getWorkoutItem(int position){
+        return items.get(position);
+    }
+
 }

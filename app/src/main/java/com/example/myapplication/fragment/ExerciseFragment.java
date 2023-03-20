@@ -1,11 +1,7 @@
 package com.example.myapplication.fragment;
 
+import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -14,54 +10,84 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.myapplication.R;
 import com.example.myapplication.api.APIClient;
 import com.example.myapplication.api.APIInterface;
 import com.example.myapplication.entity.Exercise;
+import com.example.myapplication.util.ExerciseAdapter;
 import com.example.myapplication.util.FragmentChangeListener;
 import com.example.myapplication.util.WorkoutAdapter;
 import com.example.myapplication.util.WorkoutItem;
 import com.example.myapplication.util.WorkoutItemClickListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WorkoutFragment extends Fragment implements FragmentChangeListener {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link ExerciseFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class ExerciseFragment extends Fragment implements FragmentChangeListener {
 
-    private static final String TAG = "WorkoutActivity";
+    private static View result;
     private static RecyclerView recyclerView;
-    private static WorkoutAdapter workoutAdapter;
+    private static ExerciseAdapter exerciseAdapter;
+    private static WorkoutItem workoutItem;
     private static final String BASE_URL = "https://api.api-ninjas.com/";
     private static APIInterface apiInterface;
-    private Call<List<Exercise>> listWorkoutCall;
+    private Call<List<Exercise>> listExerciseCall;
+    private List<Exercise> items;
 
+    private ImageButton previousButton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View result = inflater.inflate(R.layout.fragment_workout, container, false);
+        result = inflater.inflate(R.layout.fragment_exercise, container, false);
 
-        List<WorkoutItem> items = initWorkoutList();
-        recyclerView = result.findViewById(R.id.workout_recyclerview);
-        workoutAdapter = new WorkoutAdapter(result.getContext(), items);
+        ImageView exerciseImage = result.findViewById(R.id.exercise_image);
+        TextView exercisePageTitle = result.findViewById(R.id.exercise_page_title);
+        TextView exerciseNumber = result.findViewById(R.id.exercise_number_page);
+        exerciseNumber.setPaintFlags(exerciseNumber.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG); //Underline
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(result.getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(workoutAdapter);
+        Bundle bundle = this.getArguments();
 
-        // Retrofit for fetching the data from the API Ninja
-        apiInterface = APIClient.getClient(BASE_URL).create(APIInterface.class);
+        if (bundle != null) {
+            workoutItem = bundle.getParcelable("Workout");
 
-        for (WorkoutItem item: items) {
+            exerciseImage.setImageResource(workoutItem.getImage());
+            exercisePageTitle.setText(workoutItem.getTypeName());
+
+            items = new ArrayList<Exercise>();
+
+            recyclerView = result.findViewById(R.id.exercise_recyclerview);
+            exerciseAdapter = new ExerciseAdapter(result.getContext(), items);
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(result.getContext()));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(exerciseAdapter);
+
+            // Retrofit for fetching the data from the API Ninja
+            apiInterface = APIClient.getClient(BASE_URL).create(APIInterface.class);
 
             // Calling the API
-            listWorkoutCall = apiInterface.getDataByType(item.getApiParam());
-            listWorkoutCall.enqueue(new Callback<List<Exercise>>() {
+            listExerciseCall = apiInterface.getDataByType(workoutItem.getApiParam());
+            listExerciseCall.enqueue(new Callback<List<Exercise>>() {
                 @Override
                 public void onResponse(Call<List<Exercise>> call, Response<List<Exercise>> response) {
 
@@ -69,8 +95,12 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
                     if (response.code() == 200) { // HTTP Response OK
 
                         List<Exercise> data = response.body();
-                        item.setNumberOfExercise(data.size());
-                        workoutAdapter.notifyDataSetChanged();
+
+                        for (Exercise exercise : data) {
+                            items.add(exercise);
+                        }
+                        exerciseNumber.setText(data.size() + " exercises");
+                        exerciseAdapter.notifyDataSetChanged();
 
                     } else {
                         Toast.makeText(result.getContext(), "\"Unable to collect the data... Please Check your connection\"", Toast.LENGTH_LONG).show();
@@ -83,9 +113,20 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
                     Toast.makeText(result.getContext(), "API Failed !", Toast.LENGTH_SHORT).show();
                 }
             });
+            configureOnClickRecyclerView();
         }
 
-        configureOnClickRecyclerView();
+        previousButton = result.findViewById(R.id.previous_button_exercise);
+        previousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WorkoutFragment workoutFragment = new WorkoutFragment();
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.relativelayout, workoutFragment)
+                        .commit();
+            }
+        });
 
         return result;
     }
@@ -99,7 +140,7 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
     private String mParam1;
     private String mParam2;
 
-    public WorkoutFragment() {
+    public ExerciseFragment() {
         // Required empty public constructor
     }
 
@@ -109,19 +150,17 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment WorkoutFragment.
+     * @return A new instance of fragment ExerciseFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WorkoutFragment newInstance(String param1, String param2) {
-        WorkoutFragment fragment = new WorkoutFragment();
+    public static ExerciseFragment newInstance(String param1, String param2) {
+        ExerciseFragment fragment = new ExerciseFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,35 +171,15 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
         }
     }
 
-    /**
-     * Use this method to initialize the list of workout types
-     * by using a HashMap structure with the title of the workout as key
-     * and the parameter of this workout for the API call as value
-     *
-     * @return A HashMap of possible type of Workout
-     */
-    public ArrayList<WorkoutItem> initWorkoutList() {
-        ArrayList<WorkoutItem> workoutList = new ArrayList<WorkoutItem>();
-        workoutList.add(new WorkoutItem("Cardio", "cardio", 0, R.drawable.cardio_workout));
-        workoutList.add(new WorkoutItem("Olympic Weight Lifting", "olympic_weightlifting", 0, R.drawable.olympic_workout));
-        workoutList.add(new WorkoutItem("Plyometrics", "plyometrics", 0, R.drawable.plyometric_workout));
-        workoutList.add(new WorkoutItem("Power Lifting", "powerlifting", 0, R.drawable.powerlifting_workout));
-        workoutList.add(new WorkoutItem("Strength", "strength", 0, R.drawable.strength_workout));
-        workoutList.add(new WorkoutItem("Stretching", "stretching", 0, R.drawable.stretching_workout));
-        workoutList.add(new WorkoutItem("Strongman",  "strongman", 0, R.drawable.strongman_workout));
-        return workoutList;
-    }
-
-
     private void configureOnClickRecyclerView(){
         WorkoutItemClickListener.addTo(recyclerView, R.layout.fragment_workout)
                 .setOnItemClickListener(new WorkoutItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        WorkoutItem workoutItem = workoutAdapter.getWorkoutItem(position);
+                        Exercise exerciseItem = exerciseAdapter.getExerciseItem(position);
 
                         Bundle bundle = new Bundle();
-                        bundle.putParcelable("Workout", workoutItem);
+                        bundle.putParcelable("Exercise", exerciseItem);
 
                         ExerciseFragment exerciseFragment = new ExerciseFragment();
                         exerciseFragment.setArguments(bundle);
@@ -172,10 +191,6 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
 
     @Override
     public void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.relativelayout, fragment);
-        fragmentTransaction.addToBackStack(fragment.toString());
-        fragmentTransaction.commit();
+
     }
 }
