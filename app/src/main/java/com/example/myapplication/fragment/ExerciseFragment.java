@@ -180,17 +180,22 @@ public class ExerciseFragment extends Fragment implements FragmentChangeListener
 
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("Exercise", exerciseItem);
+                        bundle.putParcelable("ActiveWorkout", workoutItem);
 
-                        ExerciseFragment exerciseFragment = new ExerciseFragment();
-                        exerciseFragment.setArguments(bundle);
+                        DetailFragment detailFragment = new DetailFragment();
+                        detailFragment.setArguments(bundle);
 
-                        replaceFragment(exerciseFragment);
+                        replaceFragment(detailFragment);
                     }
                 });
     }
 
     @Override
     public void replaceFragment(Fragment fragment) {
-
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.relativelayout, fragment);
+        fragmentTransaction.addToBackStack(fragment.toString());
+        fragmentTransaction.commit();
     }
 }
