@@ -98,13 +98,14 @@ public class DetailFragment extends Fragment {
                 String text = String.valueOf(chronoButton.getText());
                 switch(text){
                     case "START":
+                    case "RESUME":
                         chronometer.resume();
                         chronoButton.setText("STOP");
                         break;
 
                     case "STOP":
                         chronometer.pause();
-                        chronoButton.setText("START");
+                        chronoButton.setText("RESUME");
                         break;
 
                     default:
