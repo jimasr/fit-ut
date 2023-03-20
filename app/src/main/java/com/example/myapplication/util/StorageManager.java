@@ -63,19 +63,21 @@ public class StorageManager {
      * @param file
      */
     private void deleteData(Uri file) {
-        StorageReference desertRef = storageRef.child(file.getLastPathSegment());
+        if(file != null) {
+            StorageReference imageRef = storageRef.child(file.getLastPathSegment());
 
-        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.i("StorageManager", "Image deleted!");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.e("StorageManager", "Image fail to be deleted");
-            }
-        });
+            imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.i("StorageManager", "Image deleted!");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.e("StorageManager", "Image fail to be deleted");
+                }
+            });
+        }
     }
 
     /**
