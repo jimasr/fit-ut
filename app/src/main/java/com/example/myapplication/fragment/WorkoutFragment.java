@@ -145,7 +145,7 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
         workoutList.add(new WorkoutItem("Power Lifting", "powerlifting", 0, R.drawable.powerlifting_workout));
         workoutList.add(new WorkoutItem("Strength", "strength", 0, R.drawable.strength_workout));
         workoutList.add(new WorkoutItem("Stretching", "stretching", 0, R.drawable.stretching_workout));
-        workoutList.add(new WorkoutItem("Strongman",  "strongman", 0, R.drawable.strength_workout));
+        workoutList.add(new WorkoutItem("Strongman",  "strongman", 0, R.drawable.strongman_workout));
         return workoutList;
     }
 
