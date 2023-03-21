@@ -14,17 +14,28 @@
 
         android:background="@drawable/previous_button"/>
 
+
+    <ImageView
+        android:id="@+id/chronometer_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/chronometer"
+
+        android:layout_centerHorizontal="true"/>
+
     <TextView
         android:id="@+id/exercise_chronometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="75dp"
+        android:layout_margin="10dp"
 
         android:text="0:0:0"
         android:textSize="30dp"
         android:textColor="@color/purple_700"
 
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/chronometer_image"/>
 
     <TextView
         android:id="@+id/exercise_name"
@@ -32,61 +43,122 @@
         android:layout_height="wrap_content"
 
         android:text="Name"
-        android:textSize="25dp"
+        android:textSize="30dp"
         android:textStyle="bold"
 
         android:layout_centerHorizontal="true"
         android:layout_below="@id/exercise_chronometer"/>
 
+
     <TextView
         android:id="@+id/exercise_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
 
-        android:text="Type :"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-
+        android:layout_below="@id/exercise_name"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/exercise_name"/>
+        android:layout_marginStart="10dp"
+
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Type :"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="italic|bold"/>
+
+
+    <TextView
+        android:id="@+id/exercise_muscle_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/exercise_type"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+
+        android:layout_marginBottom="10dp"
+        android:text="Muscle targeted : "
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/exercise_muscle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_below="@id/exercise_type"
 
-        android:text="Muscle targeted :"
-        android:textSize="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@id/exercise_muscle_title"
+        android:text="Muscle"
         android:textColor="@color/black"
+        android:textSize="15dp" />
 
-        android:layout_below="@id/exercise_type"/>
+    <TextView
+        android:id="@+id/exercise_equipment_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/exercise_muscle"
+        android:layout_marginTop="10dp"
+
+        android:layout_marginBottom="10dp"
+        android:layout_toLeftOf="@id/exercise_equipment"
+        android:text="Equipment : "
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/exercise_equipment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
 
-        android:text="Equipment : "
-        android:textSize="20dp"
-        android:textColor="@color/black"
-
+        android:layout_below="@id/exercise_muscle_title"
         android:layout_alignParentEnd="true"
-        android:layout_below="@id/exercise_muscle"/>
+
+        android:layout_marginTop="12.5dp"
+        android:layout_marginEnd="10dp"
+
+        android:layout_marginBottom="10dp"
+        android:text="Equipment"
+        android:textColor="@color/black"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/exercise_difficulty_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/exercise_equipment"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+
+        android:layout_marginBottom="10dp"
+        android:text="Difficulty : "
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/exercise_difficulty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
 
-        android:text="Difficulty :"
-        android:textSize="20dp"
+        android:layout_below="@id/exercise_equipment"
+
+        android:layout_marginTop="15dp"
+
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@id/exercise_difficulty_title"
+        android:text="Difficulty"
         android:textColor="@color/black"
-
-        android:layout_below="@id/exercise_equipment"/>
+        android:textSize="15dp" />
 
     <TextView
         android:id="@+id/exercise_instructions_title"
@@ -120,6 +192,8 @@
          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            android:textSize="15dp"
+
 
             android:layout_centerHorizontal="true" />
 
@@ -127,7 +201,7 @@
 
 
     <Button
-        android:id="@+id/chrono_button"
+        android:id="@+id/start_button"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="70dp"
@@ -137,5 +211,33 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:background="@drawable/rounded_corner" />
+
+    <Button
+        android:id="@+id/resume_stop_button"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
+        android:layout_marginLeft="70dp"
+        android:visibility="gone"
+
+        android:text="PAUSE"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/rounded_corner"/>
+
+    <Button
+        android:id="@+id/reset_button"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
+        android:layout_marginRight="70dp"
+        android:visibility="gone"
+
+        android:text="FINISH"
+
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/rounded_corner"/>
 
 </RelativeLayout>

@@ -34,8 +34,8 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseHolder>{
     @Override
     public void onBindViewHolder(@NonNull ExerciseHolder holder, int position) {
         holder.exerciseTitle.setText(items.get(position).getName());
-        holder.exerciseDifficulty.setText("Difficulty : " + items.get(position).getDifficulty());
-        holder.exerciseMuscle.setText("Muscle : " + items.get(position).getMuscle());
+        holder.exerciseDifficulty.setText(items.get(position).getDifficulty());
+        holder.exerciseMuscle.setText(items.get(position).getMuscle());
     }
 
     @Override

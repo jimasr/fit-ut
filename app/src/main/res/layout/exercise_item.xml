@@ -36,7 +36,7 @@
                 android:textSize="25dp" />
 
             <TextView
-                android:id="@+id/exercise_difficulty_item"
+                android:id="@+id/exercise_difficulty_title_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -44,14 +44,29 @@
                 android:layout_marginLeft="10dp"
 
                 android:text="Difficulty : "
-                android:textSize="15dp"
+                android:textSize="17.5dp"
+                android:textStyle="bold"
                 android:textColor="@color/black"
 
-                android:layout_below="@id/exercise_title_item"
-                />
+                android:layout_below="@id/exercise_title_item" />
 
             <TextView
-                android:id="@+id/exercise_muscle_item"
+                android:id="@+id/exercise_difficulty_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+
+                android:textSize="15dp"
+                android:text="Difficulty"
+
+                android:layout_below="@id/exercise_title_item"
+                android:layout_toRightOf="@+id/exercise_difficulty_title_item"/>
+
+            <TextView
+                android:id="@+id/exercise_muscle_title_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -59,10 +74,26 @@
                 android:layout_marginLeft="10dp"
 
                 android:text=" Muscle : "
+                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="15dp"
+                android:textSize="17.5dp"
 
                 android:layout_below="@id/exercise_difficulty_item"/>
+
+            <TextView
+                android:id="@+id/exercise_muscle_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+
+                android:textSize="15dp"
+                android:text="Muscle"
+
+                android:layout_below="@id/exercise_difficulty_item"
+                android:layout_toRightOf="@+id/exercise_muscle_title_item"/>
 
 
             <ImageView
