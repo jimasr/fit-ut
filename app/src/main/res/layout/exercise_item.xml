@@ -45,8 +45,7 @@
 
                 android:text="Difficulty : "
                 android:textSize="17.5dp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textColor="@color/purple_500"
 
                 android:layout_below="@id/exercise_title_item" />
 
@@ -74,8 +73,7 @@
                 android:layout_marginLeft="10dp"
 
                 android:text=" Muscle : "
-                android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textColor="@color/purple_500"
                 android:textSize="17.5dp"
 
                 android:layout_below="@id/exercise_difficulty_item"/>

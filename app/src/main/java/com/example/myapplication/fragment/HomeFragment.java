@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -71,6 +72,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static final String BASE_URL = "https://maps.googleapis.com";
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private View view;
     private MapView mapView;
     private LocationRequest locationRequest;
     private Location lastLocation;
@@ -83,6 +85,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private ImageView profileImage;
     private StorageManager storageManager;
     private MapsAPI mapsAPI;
+
+    private AlertDialog.Builder builder;
 
 
     public HomeFragment() {
@@ -108,12 +112,37 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mapView = view.findViewById(R.id.mapView);
         cardView = view.findViewById(R.id.cardView);
         profileTextView = view.findViewById(R.id.profileTextView);
         profileImage = view.findViewById(R.id.profileImage);
+
+        CardView completeWorkoutCard = view.findViewById(R.id.completedWorkoutCard);
+        completeWorkoutCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createComingSoonDialog();
+            }
+        });
+
+        CardView inProgressWorkoutCard = view.findViewById(R.id.inProgressWorkoutCard);
+
+        inProgressWorkoutCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createComingSoonDialog();
+            }
+        });
+        CardView timeSpentCard = view.findViewById(R.id.timeSpentCard);
+
+        timeSpentCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createComingSoonDialog();
+            }
+        });
 
         if(AppStatus.getInstance(getContext()).isConnected()) {
             updateUI();
@@ -363,4 +392,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    public void createComingSoonDialog() {
+        builder = new AlertDialog.Builder(view.getContext());
+
+        //Setting message manually and performing action on button click
+        builder.setMessage("This feature will be coming soon")
+                .setCancelable(false)
+                .setNeutralButton("Got it", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.setTitle("Stay Tuned !");
+        alert.show();
+    }
 }
