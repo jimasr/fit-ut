@@ -75,9 +75,9 @@ public class DetailFragment extends Fragment {
             //Setting correctly the text according to the given exercise
             exerciseNameTV.setText(exercise.getName());
             exerciseTypeTV.setText(exercise.getType());
-            exerciseMuscleTV.setText("Muscle Targeted : " + exercise.getMuscle());
-            exerciseEquipmentTV.setText("Equipment : " + exercise.getEquipment());
-            exerciseDifficultyTV.setText("Difficulty : " + exercise.getDifficulty());
+            exerciseMuscleTV.setText(exercise.getMuscle());
+            exerciseEquipmentTV.setText(exercise.getEquipment());
+            exerciseDifficultyTV.setText(exercise.getDifficulty());
             exerciseInstructionsTV.setText(exercise.getInstructions());
         }
 
@@ -113,10 +113,10 @@ public class DetailFragment extends Fragment {
                 switch(text){
                     case "RESUME":
                         chronometer.resume();
-                        resumeButton.setText("STOP");
+                        resumeButton.setText("PAUSE");
                         break;
 
-                    case "STOP":
+                    case "PAUSE":
                         chronometer.pause();
                         resumeButton.setText("RESUME");
                         break;
@@ -131,7 +131,7 @@ public class DetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 chronometer.stop();
-                startButton.setVisibility(View.GONE);
+                startButton.setVisibility(View.VISIBLE);
                 resumeButton.setVisibility(View.GONE);
                 resetButton.setVisibility(View.GONE);
             }

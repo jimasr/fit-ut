@@ -16,6 +16,14 @@
         android:textStyle="bold"
         android:textColor="@color/purple_700"/>
 
+    <ImageView
+        android:layout_width="110dp"
+        android:layout_height="75dp"
+        android:layout_margin="10dp"
+
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/logo_no_background"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/workout_recyclerview"
         android:layout_width="match_parent"
