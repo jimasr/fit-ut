@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.api.APIClient;
-import com.example.myapplication.api.APIInterface;
+import com.example.myapplication.api.NinjaAPI;
 import com.example.myapplication.entity.Exercise;
 import com.example.myapplication.util.FragmentChangeListener;
 import com.example.myapplication.util.WorkoutAdapter;
@@ -35,7 +35,7 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
     private static RecyclerView recyclerView;
     private static WorkoutAdapter workoutAdapter;
     private static final String BASE_URL = "https://api.api-ninjas.com/";
-    private static APIInterface apiInterface;
+    private static NinjaAPI ninjaApi;
     private Call<List<Exercise>> listWorkoutCall;
 
 
@@ -53,12 +53,12 @@ public class WorkoutFragment extends Fragment implements FragmentChangeListener 
         recyclerView.setAdapter(workoutAdapter);
 
         // Retrofit for fetching the data from the API Ninja
-        apiInterface = APIClient.getClient(BASE_URL).create(APIInterface.class);
+        ninjaApi = APIClient.getClient(BASE_URL).create(NinjaAPI.class);
 
         for (WorkoutItem item: items) {
 
             // Calling the API
-            listWorkoutCall = apiInterface.getDataByType(item.getApiParam());
+            listWorkoutCall = ninjaApi.getDataByType(item.getApiParam());
             listWorkoutCall.enqueue(new Callback<List<Exercise>>() {
                 @Override
                 public void onResponse(Call<List<Exercise>> call, Response<List<Exercise>> response) {

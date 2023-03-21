@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,11 +20,10 @@ import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.api.APIClient;
-import com.example.myapplication.api.APIInterface;
+import com.example.myapplication.api.NinjaAPI;
 import com.example.myapplication.entity.Exercise;
 import com.example.myapplication.util.ExerciseAdapter;
 import com.example.myapplication.util.FragmentChangeListener;
-import com.example.myapplication.util.WorkoutAdapter;
 import com.example.myapplication.util.WorkoutItem;
 import com.example.myapplication.util.WorkoutItemClickListener;
 
@@ -48,7 +46,7 @@ public class ExerciseFragment extends Fragment implements FragmentChangeListener
     private static ExerciseAdapter exerciseAdapter;
     private static WorkoutItem workoutItem;
     private static final String BASE_URL = "https://api.api-ninjas.com/";
-    private static APIInterface apiInterface;
+    private static NinjaAPI ninjaApi;
     private Call<List<Exercise>> listExerciseCall;
     private List<Exercise> items;
 
@@ -83,10 +81,10 @@ public class ExerciseFragment extends Fragment implements FragmentChangeListener
             recyclerView.setAdapter(exerciseAdapter);
 
             // Retrofit for fetching the data from the API Ninja
-            apiInterface = APIClient.getClient(BASE_URL).create(APIInterface.class);
+            ninjaApi = APIClient.getClient(BASE_URL).create(NinjaAPI.class);
 
             // Calling the API
-            listExerciseCall = apiInterface.getDataByType(workoutItem.getApiParam());
+            listExerciseCall = ninjaApi.getDataByType(workoutItem.getApiParam());
             listExerciseCall.enqueue(new Callback<List<Exercise>>() {
                 @Override
                 public void onResponse(Call<List<Exercise>> call, Response<List<Exercise>> response) {

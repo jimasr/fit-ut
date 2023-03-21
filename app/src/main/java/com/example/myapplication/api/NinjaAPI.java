@@ -10,7 +10,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Query;
 
-public interface APIInterface {
+public interface NinjaAPI {
 
     @Headers("X-Api-Key:" + BuildConfig.NINJA_API_KEY)
     @GET("/v1/exercises")

@@ -1,12 +1,10 @@
 package com.example.myapplication.fragment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -15,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,14 +24,11 @@ import androidx.fragment.app.Fragment;
 import com.example.myapplication.BuildConfig;
 import com.example.myapplication.R;
 import com.example.myapplication.api.APIClient;
-import com.example.myapplication.api.APIInterface;
 import com.example.myapplication.api.MapsAPI;
 import com.example.myapplication.entity.Place;
-import com.example.myapplication.pojo.maps.Geometry;
 import com.example.myapplication.pojo.maps.MapsPojo;
 import com.example.myapplication.pojo.maps.Result;
 import com.example.myapplication.util.AppStatus;
-import com.example.myapplication.util.FetchData;
 import com.example.myapplication.util.StorageManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -53,15 +47,8 @@ import com.google.android.libraries.places.api.Places;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
 
 import retrofit2.Call;
 import retrofit2.Callback;
