@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.myapplication.R;
 import com.example.myapplication.entity.Exercise;
 import com.example.myapplication.util.WorkoutItem;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -32,8 +33,9 @@ public class DetailFragment extends Fragment {
 
     private static View result;
     private ImageButton previousButton;
-    private Button chronoButton;
-    private TextView timer;
+    private Button startButton;
+    private Button resumeButton;
+    private Button resetButton;
     private StopWatch chronometer;
     private long timeWhenStopped = 0;
     private Exercise exercise;
@@ -46,7 +48,9 @@ public class DetailFragment extends Fragment {
         result = inflater.inflate(R.layout.fragment_detail, container, false);
 
         previousButton = result.findViewById(R.id.exercise_previous_button);
-        chronoButton = result.findViewById(R.id.chrono_button);
+        startButton = result.findViewById(R.id.start_button);
+        resetButton = result.findViewById(R.id.reset_button);
+        resumeButton = result.findViewById(R.id.resume_stop_button);
 
         chronometer = new StopWatch(result.findViewById(R.id.exercise_chronometer));
 
@@ -92,25 +96,44 @@ public class DetailFragment extends Fragment {
             }
         });
 
-        chronoButton.setOnClickListener(new View.OnClickListener() {
+        startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String text = String.valueOf(chronoButton.getText());
+                chronometer.start();
+                startButton.setVisibility(View.GONE);
+                resumeButton.setVisibility(View.VISIBLE);
+                resetButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        resumeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String text = String.valueOf(resumeButton.getText());
                 switch(text){
-                    case "START":
                     case "RESUME":
                         chronometer.resume();
-                        chronoButton.setText("STOP");
+                        resumeButton.setText("STOP");
                         break;
 
                     case "STOP":
                         chronometer.pause();
-                        chronoButton.setText("RESUME");
+                        resumeButton.setText("RESUME");
                         break;
 
                     default:
                         break;
                 }
+            }
+        });
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chronometer.stop();
+                startButton.setVisibility(View.GONE);
+                resumeButton.setVisibility(View.GONE);
+                resetButton.setVisibility(View.GONE);
             }
         });
 
